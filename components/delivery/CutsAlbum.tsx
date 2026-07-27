@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import type { CutInfo, PublicDeliveryConfig } from "@/lib/types";
+import { forceDownloadUrl, buildDownloadFilename } from "@/lib/download-url";
 
 function DownloadIcon({ className }: { className?: string }) {
   return (
@@ -17,7 +18,15 @@ function DownloadIcon({ className }: { className?: string }) {
   );
 }
 
-function Row({ cut, index }: { cut: CutInfo; index: number }) {
+function Row({
+  cut,
+  index,
+  downloadHref,
+}: {
+  cut: CutInfo;
+  index: number;
+  downloadHref: string;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -33,8 +42,7 @@ function Row({ cut, index }: { cut: CutInfo; index: number }) {
         <p className="mt-1 text-sm tabular-nums text-white/40">{cut.duration}</p>
       </div>
       <a
-        href={cut.url}
-        download
+        href={downloadHref}
         className="flex flex-none items-center gap-2 border border-white/20 px-4 py-2 text-xs tracking-[0.2em] text-white/80 uppercase transition hover:border-[var(--accent)] hover:text-white"
       >
         <DownloadIcon className="h-3.5 w-3.5" />
@@ -70,9 +78,20 @@ export default function CutsAlbum({ delivery }: { delivery: PublicDeliveryConfig
         </h2>
 
         <div className="mt-8">
-          {extraCuts.map((cut, i) => (
-            <Row key={cut.label} cut={cut} index={i} />
-          ))}
+          {extraCuts.map((cut, i) => {
+            const filename = buildDownloadFilename(
+              [delivery.clientName, delivery.carMake, delivery.carModel, cut.label],
+              cut.url
+            );
+            return (
+              <Row
+                key={cut.label}
+                cut={cut}
+                index={i}
+                downloadHref={forceDownloadUrl(cut.url, filename)}
+              />
+            );
+          })}
         </div>
       </motion.div>
     </section>

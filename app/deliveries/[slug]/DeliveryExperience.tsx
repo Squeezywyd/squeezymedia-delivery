@@ -7,6 +7,7 @@ import PasswordGate from "@/components/delivery/PasswordGate";
 import CountdownTeaser from "@/components/delivery/CountdownTeaser";
 import IgnitionLoader from "@/components/delivery/IgnitionLoader";
 import HeroPlayer from "@/components/delivery/HeroPlayer";
+import HeroDownload from "@/components/delivery/HeroDownload";
 import StillsGallery from "@/components/delivery/StillsGallery";
 import CutsAlbum from "@/components/delivery/CutsAlbum";
 import FilmCertificate from "@/components/delivery/FilmCertificate";
@@ -84,6 +85,7 @@ export default function DeliveryExperience({
       {phase === "revealed" && (
         <>
           <HeroPlayer delivery={delivery} />
+          <HeroDownload delivery={delivery} />
           <StillsGallery
             stills={delivery.stills}
             carLabel={`${delivery.carMake} ${delivery.carModel}`}
